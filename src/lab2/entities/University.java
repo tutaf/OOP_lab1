@@ -15,4 +15,8 @@ public class University {
         faculties.add(faculty);
     }
 
+    public List<Faculty> getFacultyList() {
+        return faculties;
+    }
+
 }

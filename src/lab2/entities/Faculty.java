@@ -26,6 +26,8 @@ public class Faculty {
         this.students.add(student);
     }
 
-
-
+    @Override
+    public String toString() {
+        return String.format("Faculty(name: %s; abbreviation: %s; studyField: %s)", name, abbreviation, studyField);
+    }
 }
