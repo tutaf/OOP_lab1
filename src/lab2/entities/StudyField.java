@@ -1,0 +1,9 @@
+package lab2.entities;
+
+public enum StudyField {
+    MECHANICAL_ENGINEERING,
+    SOFTWARE_ENGINEERING,
+    FOOD_ENGINEERING,
+    URBANISM_ARCHITECTURE,
+    VETERINARY_MEDICINE,
+}
