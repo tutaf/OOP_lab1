@@ -1,5 +1,7 @@
 package lab2.operations;
 
+import lab2.operations.faculty.CreateStudent;
+import lab2.operations.faculty.DisplayEnrolledStudents;
 import lab2.operations.general.CreateFaculty;
 import lab2.operations.general.DisplayFaculties;
 
@@ -11,13 +13,15 @@ public class OperationRegistry {
 
 
     public OperationRegistry() {
-        operationMap.put("nf", new CreateFaculty());
-        operationMap.put("df", new DisplayFaculties());
+        registerOperation("nf", new CreateFaculty());
+        registerOperation("df", new DisplayFaculties());
+        registerOperation("ns", new CreateStudent());
+        registerOperation("ds", new DisplayEnrolledStudents());
     }
 
-//    public void registerOperation(String name, Operation operation) {
-//        operationMap.put(name, operation);
-//    }
+    public void registerOperation(String name, Operation operation) {
+        operationMap.put(name, operation);
+    }
 
     public Operation getOperation(String name) {
         return operationMap.get(name);

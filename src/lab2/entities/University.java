@@ -19,4 +19,11 @@ public class University {
         return faculties;
     }
 
+    public Faculty getFacultyByAbbreviation(String abbreviation) {
+        return faculties.stream()
+                .filter(faculty -> faculty.getAbbreviation().equals(abbreviation))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

@@ -14,5 +14,7 @@ public class CreateFaculty implements Operation {
         StudyField studyField = StudyField.valueOf(args[3]);
 
         university.addFaculty(new Faculty(facultyName, facultyAbbreviation, studyField));
+
+        System.out.println("Faculty created successfully!");
     }
 }
