@@ -3,7 +3,7 @@ package lab2;
 import lab2.entities.University;
 import lab2.operations.OperationRegistry;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class ApplicationLoop {
 
@@ -51,13 +51,21 @@ public class ApplicationLoop {
                     } case "f" -> {
                         state = ProgramState.FACULTY_OPERATIONS;
                         displayHelp(state);
-                    }
+                    } default -> showInvalidCommandErrorMessage(input[0]);
                 }
             }
             case GENERAL_OPERATIONS -> {
+                if (!isValidCommand(Arrays.asList("nf", "ss", "df"), input[0])) {
+                    showInvalidCommandErrorMessage(input[0]);
+                    return;
+                }
                 operationRegistry.getOperation(input[0]).execute(input, university);
             }
             case FACULTY_OPERATIONS -> {
+                if (!isValidCommand(Arrays.asList("ns", "gs", "ds", "dg", "bf"), input[0])) {
+                    showInvalidCommandErrorMessage(input[0]);
+                    return;
+                }
                 operationRegistry.getOperation(input[0]).execute(input, university);
             }
         }
@@ -82,7 +90,7 @@ public class ApplicationLoop {
                 System.out.println("General operations");
                 System.out.println("What do you want to do?\n");
                 System.out.println("nf/<faculty name>/<faculty abbreviation>/<field> - create faculty");
-                System.out.println("ss/<student email> - search student and show faculty"); // TODO: add this
+                System.out.println("TODO - ss/<student email> - search student and show faculty");
                 System.out.println("df - display faculties");
                 System.out.println("df/<field> - display all faculties of a field");
                 System.out.println("\nb - Back");
@@ -92,16 +100,28 @@ public class ApplicationLoop {
                 System.out.println("Faculty operations");
                 System.out.println("What do you want to do?\n");
                 System.out.println("ns/<faculty abbreviation>/<student first name>/<student last name>/<student email>/<day>/<month>/<year> - create student");
-                System.out.println("gs/<email> - (g)raduate (s)tudent");
+                System.out.println("TODO - gs/<email> - (g)raduate (s)tudent");
                 System.out.println("ds/<faculty abbreviation> - (d)isplay enrolled (s)tudents");
-                System.out.println("dg/<faculty abbreviation> - (d)isplay (g)raduated students");
-                System.out.println("bf/<faculty abbreviation>/<email> - check if student (b)elongs to (f)aculty");
+                System.out.println("TODO - dg/<faculty abbreviation> - (d)isplay (g)raduated students");
+                System.out.println("TODO - bf/<faculty abbreviation>/<email> - check if student (b)elongs to (f)aculty");
 
 
                 System.out.println("\nb - Back");
                 System.out.println("q - Quit");
                 break;
         }
+    }
+
+    private boolean isValidCommand(List<String> validCommands, String command) {
+        return validCommands.contains(command);
+    }
+
+    private void showErrorMessage(String message) {
+        System.out.println("\u001B[31m" + message + "\u001B[0m");
+    }
+
+    private void showInvalidCommandErrorMessage(String command) {
+        showErrorMessage(command + " is not a valid command. Use h for help.");
     }
 
     enum ProgramState {

@@ -12,7 +12,6 @@ public class Student {
 
 
 
-
     public Student(String name, String lastName, String email, LocalDate enrollmentDate, LocalDate dateOfBirth) {
         this.name = name;
         this.lastName = lastName;
