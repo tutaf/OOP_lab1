@@ -59,14 +59,16 @@ public class ApplicationLoop {
                     showInvalidCommandErrorMessage(input[0]);
                     return;
                 }
-                operationRegistry.getOperation(input[0]).execute(input, university);
+                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
+                if (!success) showInvalidArgumentsException();
             }
             case FACULTY_OPERATIONS -> {
                 if (!isValidCommand(Arrays.asList("ns", "gs", "ds", "dg", "bf"), input[0])) {
                     showInvalidCommandErrorMessage(input[0]);
                     return;
                 }
-                operationRegistry.getOperation(input[0]).execute(input, university);
+                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
+                if (!success) showInvalidArgumentsException();
             }
         }
     }
@@ -118,6 +120,10 @@ public class ApplicationLoop {
 
     private void showErrorMessage(String message) {
         System.out.println("\u001B[31m" + message + "\u001B[0m");
+    }
+
+    private void showInvalidArgumentsException() {
+        System.out.println("\u001B[31mError! Check your arguments. Help - \"h\"\u001B[0m");
     }
 
     private void showInvalidCommandErrorMessage(String command) {

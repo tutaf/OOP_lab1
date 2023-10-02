@@ -7,7 +7,12 @@ import java.time.LocalDate;
 
 public class CreateStudent implements Operation {
     @Override
-    public void execute(String[] args, University university) {
+    public int requiredArgsNumber() {
+        return 8;
+    }
+
+    @Override
+    public boolean execute(String[] args, University university) {
         String facultyAbbreviation = args[1];
         String firstName = args[2];
         String lastName = args[3];
@@ -22,5 +27,6 @@ public class CreateStudent implements Operation {
         university.getFacultyByAbbreviation(facultyAbbreviation).addStudent(firstName, lastName, email, enrollmentDate, dateOfBirth);
 
         System.out.println("Student created successfully!");
+        return true;
     }
 }

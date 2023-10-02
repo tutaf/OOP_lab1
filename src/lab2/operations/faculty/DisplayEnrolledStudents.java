@@ -9,12 +9,18 @@ import java.util.List;
 public class DisplayEnrolledStudents implements Operation {
 
     @Override
-    public void execute(String[] args, University university) {
+    public int requiredArgsNumber() {
+        return 2;
+    }
+
+    @Override
+    public boolean execute(String[] args, University university) {
         String facultyAbbreviation = args[1];
         List<Student> enrolledStudentList = university.getFacultyByAbbreviation(facultyAbbreviation).getEnrolledStudents();
 
         for(Student student : enrolledStudentList) {
             System.out.println(student.toString());
         }
+        return true;
     }
 }

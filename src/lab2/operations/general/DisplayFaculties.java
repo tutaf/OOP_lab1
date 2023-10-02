@@ -10,7 +10,12 @@ import java.util.List;
 
 public class DisplayFaculties implements Operation {
     @Override
-    public void execute(String[] args, University university) {
+    public int requiredArgsNumber() { // TODO: this breaks no-argument command, fix required
+        return 1;
+    }
+
+    @Override
+    public boolean execute(String[] args, University university) {
 
         List<Faculty> facultyList = university.getFacultyList();
 
@@ -29,5 +34,7 @@ public class DisplayFaculties implements Operation {
         for (Faculty faculty : facultyList) {
             System.out.println(faculty.toString());
         }
+
+        return true;
     }
 }
