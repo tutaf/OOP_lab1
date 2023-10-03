@@ -20,7 +20,9 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public String toString() {

@@ -19,6 +19,24 @@ public class University {
         return faculties;
     }
 
+    public boolean graduateStudentByEmail(String email) {
+        for (Faculty faculty : faculties) {
+            if (faculty.graduateStudentByEmail(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasStudentWithEmail(String email) {
+        for (Faculty faculty : faculties) {
+            if (faculty.hasStudentWithEmail(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Faculty getFacultyByAbbreviation(String abbreviation) {
         return faculties.stream()
                 .filter(faculty -> faculty.getAbbreviation().equals(abbreviation))

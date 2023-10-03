@@ -2,6 +2,8 @@ package lab2.operations;
 
 import lab2.operations.faculty.CreateStudent;
 import lab2.operations.faculty.DisplayEnrolledStudents;
+import lab2.operations.faculty.DisplayGraduatedStudents;
+import lab2.operations.faculty.GraduateStudent;
 import lab2.operations.general.CreateFaculty;
 import lab2.operations.general.DisplayFaculties;
 
@@ -17,6 +19,8 @@ public class OperationRegistry {
         registerOperation("df", new DisplayFaculties());
         registerOperation("ns", new CreateStudent());
         registerOperation("ds", new DisplayEnrolledStudents());
+        registerOperation("gs", new GraduateStudent());
+        registerOperation("dg", new DisplayGraduatedStudents());
     }
 
     public void registerOperation(String name, Operation operation) {

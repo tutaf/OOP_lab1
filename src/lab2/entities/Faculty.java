@@ -21,9 +21,6 @@ public class Faculty {
     }
 
 
-
-
-
     public void addStudent(Student student) {
         this.enrolledStudents.add(student);
     }
@@ -41,12 +38,33 @@ public class Faculty {
         this.enrolledStudents.add(student);
     }
 
+
     public List<Student> getEnrolledStudents () {
         return enrolledStudents;
     }
 
     public List<Student> getGraduatedStudents () {
         return graduatedStudents;
+    }
+
+    public boolean graduateStudentByEmail(String email) {
+        for (int i = 0; i < enrolledStudents.size(); i++) {
+            if (enrolledStudents.get(i).getEmail().equals(email)) {
+                graduatedStudents.add(enrolledStudents.get(i));
+                enrolledStudents.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasStudentWithEmail(String email) {
+        for (Student student : enrolledStudents) {
+            if (student.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
