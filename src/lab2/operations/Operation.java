@@ -1,5 +1,6 @@
 package lab2.operations;
 
+import lab2.Utils;
 import lab2.entities.University;
 
 public interface Operation {
@@ -7,7 +8,7 @@ public interface Operation {
     /**
      * The number of required arguments for the operation.
      */
-    int requiredArgsNumber();
+    boolean matchesRequiredArgsNumber(int argNumber);
 
     /**
      * Executes the operation with given arguments and university.
@@ -28,13 +29,15 @@ public interface Operation {
      * @return True if the operation is successful and argument number matches, otherwise false.
      */
     default boolean safeExecute(String[] args, University university) {
-        if (args.length != requiredArgsNumber()) {
+        if (!matchesRequiredArgsNumber(args.length)) {
+            Utils.showInvalidArgumentNumberError();
             return false; // Argument number mismatch
         }
 
         try {
             return execute(args, university);
         } catch (Exception e) {
+            Utils.showErrorMessage("Something went wrong. Use h for help.");
             return false; // Return false on any error
         }
     }

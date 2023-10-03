@@ -1,5 +1,6 @@
 package lab2;
 
+import jdk.jshell.execution.Util;
 import lab2.entities.University;
 import lab2.operations.OperationRegistry;
 
@@ -21,7 +22,7 @@ public class ApplicationLoop {
 
         while (true) {
             handleInput(requestInput());
-            System.out.println("--------------------");
+            System.out.println();
         }
     }
 
@@ -51,25 +52,32 @@ public class ApplicationLoop {
                     } case "f" -> {
                         state = ProgramState.FACULTY_OPERATIONS;
                         displayHelp(state);
-                    } default -> showInvalidCommandErrorMessage(input[0]);
+                    } default -> Utils.showInvalidCommandError(input[0]);
                 }
             }
-            case GENERAL_OPERATIONS -> {
-                if (!isValidCommand(Arrays.asList("nf", "ss", "df"), input[0])) {
-                    showInvalidCommandErrorMessage(input[0]);
-                    return;
+            case GENERAL_OPERATIONS, FACULTY_OPERATIONS -> {
+                if (operationRegistry.isAValidOperation(input[0])) {
+                    operationRegistry.getOperation(input[0]).safeExecute(input, university);
+                } else {
+                    Utils.showInvalidCommandError(input[0]);
                 }
-                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
-                if (!success) showInvalidArgumentsException();
             }
-            case FACULTY_OPERATIONS -> {
-                if (!isValidCommand(Arrays.asList("ns", "gs", "ds", "dg", "bf"), input[0])) {
-                    showInvalidCommandErrorMessage(input[0]);
-                    return;
-                }
-                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
-                if (!success) showInvalidArgumentsException();
-            }
+//            case GENERAL_OPERATIONS -> {
+//                if (!isValidCommand(Arrays.asList("nf", "ss", "df"), input[0])) {
+//                    showInvalidCommandErrorMessage(input[0]);
+//                    return;
+//                }
+//                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
+//                if (!success) showInvalidArgumentsException();
+//            }
+//            case FACULTY_OPERATIONS -> {
+//                if (!isValidCommand(Arrays.asList("ns", "gs", "ds", "dg", "bf"), input[0])) {
+//                    showInvalidCommandErrorMessage(input[0]);
+//                    return;
+//                }
+//                boolean success = operationRegistry.getOperation(input[0]).safeExecute(input, university);
+//                if (!success) showInvalidArgumentsException();
+//            }
         }
     }
 
@@ -84,7 +92,6 @@ public class ApplicationLoop {
                 System.out.println("Available commands:");
                 System.out.println("g - General operations");
                 System.out.println("f - Faculty operations");
-                System.out.println("s - Student operations");
                 System.out.println("h - Help");
                 System.out.println("\nq - Quit");
                 break;
@@ -114,21 +121,21 @@ public class ApplicationLoop {
         }
     }
 
-    private boolean isValidCommand(List<String> validCommands, String command) {
-        return validCommands.contains(command);
-    }
-
-    private void showErrorMessage(String message) {
-        System.out.println("\u001B[31m" + message + "\u001B[0m");
-    }
-
-    private void showInvalidArgumentsException() {
-        System.out.println("\u001B[31mError! Check your arguments. Help - \"h\"\u001B[0m");
-    }
-
-    private void showInvalidCommandErrorMessage(String command) {
-        showErrorMessage(command + " is not a valid command. Use h for help.");
-    }
+//    private boolean isValidCommand(List<String> validCommands, String command) {
+//        return validCommands.contains(command);
+//    }
+//
+//    private void showErrorMessage(String message) {
+//        System.out.println("\u001B[31m" + message + "\u001B[0m");
+//    }
+//
+//    private void showInvalidArgumentsException() {
+//        System.out.println("\u001B[31mError! Check your arguments. Help - \"h\"\u001B[0m");
+//    }
+//
+//    private void showInvalidCommandErrorMessage(String command) {
+//        showErrorMessage(command + " is not a valid command. Use h for help.");
+//    }
 
     enum ProgramState {
         MAIN_MENU,

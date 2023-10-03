@@ -26,4 +26,8 @@ public class OperationRegistry {
     public Operation getOperation(String name) {
         return operationMap.get(name);
     }
+
+    public boolean isAValidOperation(String operationName) {
+        return operationMap.containsKey(operationName);
+    }
 }

@@ -1,34 +1,38 @@
 package lab2.operations.general;
 
+import lab2.Utils;
 import lab2.entities.Faculty;
 import lab2.entities.StudyField;
 import lab2.entities.University;
 import lab2.operations.Operation;
 
+import java.util.Arrays;
+
 public class CreateFaculty implements Operation {
 
+
     @Override
-    public int requiredArgsNumber() {
-        return 4;
+    public boolean matchesRequiredArgsNumber(int argNumber) {
+        return argNumber == 4;
     }
 
     @Override
     public boolean execute(String[] args, University university) {
-        if (args.length != 4) {
-            return false;
-        }
+        String facultyName = args[1];
+        String facultyAbbreviation = args[2];
+        StudyField studyField;
 
         try {
-            String facultyName = args[1];
-            String facultyAbbreviation = args[2];
-            StudyField studyField = StudyField.valueOf(args[3]);
-
-            university.addFaculty(new Faculty(facultyName, facultyAbbreviation, studyField));
-
-            System.out.println("Faculty created successfully!");
-            return true;
+            studyField = StudyField.valueOf(args[3]);
         } catch (Exception e) {
+            Utils.showInvalidStudyFieldError();
             return false;
         }
+
+        university.addFaculty(new Faculty(facultyName, facultyAbbreviation, studyField));
+
+        System.out.println("Faculty created successfully!");
+        return true;
+
     }
 }
