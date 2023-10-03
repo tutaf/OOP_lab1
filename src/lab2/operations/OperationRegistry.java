@@ -1,11 +1,9 @@
 package lab2.operations;
 
-import lab2.operations.faculty.CreateStudent;
-import lab2.operations.faculty.DisplayEnrolledStudents;
-import lab2.operations.faculty.DisplayGraduatedStudents;
-import lab2.operations.faculty.GraduateStudent;
+import lab2.operations.faculty.*;
 import lab2.operations.general.CreateFaculty;
 import lab2.operations.general.DisplayFaculties;
+import lab2.operations.general.SearchStudent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +19,8 @@ public class OperationRegistry {
         registerOperation("ds", new DisplayEnrolledStudents());
         registerOperation("gs", new GraduateStudent());
         registerOperation("dg", new DisplayGraduatedStudents());
+        registerOperation("bf", new CheckIfStudentBelongsToFaculty());
+        registerOperation("ss",new SearchStudent());
     }
 
     public void registerOperation(String name, Operation operation) {

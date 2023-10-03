@@ -94,7 +94,7 @@ public class ApplicationLoop {
         System.out.println("General operations");
         System.out.println("What do you want to do?\n");
         System.out.println("nf/<faculty name>/<faculty abbreviation>/<field> - create faculty");
-        System.out.println("TODO - ss/<student email> - search student and show faculty");
+        System.out.println("ss/<student email> - search student and show faculty");
         System.out.println("df - display faculties");
         System.out.println("df/<field> - display all faculties of a field");
         System.out.println("\nb - Back");
@@ -108,7 +108,7 @@ public class ApplicationLoop {
         System.out.println("gs/<email> - (g)raduate (s)tudent");
         System.out.println("ds/<faculty abbreviation> - (d)isplay enrolled (s)tudents");
         System.out.println("dg/<faculty abbreviation> - (d)isplay (g)raduated students");
-        System.out.println("TODO - bf/<faculty abbreviation>/<email> - check if student (b)elongs to (f)aculty");
+        System.out.println("bf/<faculty abbreviation>/<email> - check if student (b)elongs to (f)aculty");
         System.out.println("\nb - Back");
         System.out.println("q - Quit");
     }
