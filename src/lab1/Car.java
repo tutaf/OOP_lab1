@@ -1,3 +1,5 @@
+package lab1;
+
 public class Car {
     float speed = 0;
     boolean isMoving = false;
