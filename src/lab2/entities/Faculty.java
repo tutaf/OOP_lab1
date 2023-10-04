@@ -1,10 +1,11 @@
 package lab2.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Faculty {
+public class Faculty implements Serializable {
 
     private String name;
     private String abbreviation;

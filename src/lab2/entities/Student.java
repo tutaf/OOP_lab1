@@ -1,8 +1,9 @@
 package lab2.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Student {
+public class Student implements Serializable {
 
     private String name;
     private String lastName;

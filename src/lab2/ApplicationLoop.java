@@ -7,14 +7,17 @@ import java.util.Scanner;
 
 public class ApplicationLoop {
 
+    public static final String FILENAME = "university.ser";
+
     private static final Scanner scanner = new Scanner(System.in);
     private OperationRegistry operationRegistry = new OperationRegistry();
     private University university = new University();
     private ProgramState state = ProgramState.MAIN_MENU;
-
+    private SaveManager saveManager = new SaveManager();
 
 
     public void run() {
+        loadState();
 
         System.out.println("Welcome");
         displayHelp(ProgramState.MAIN_MENU);
@@ -36,6 +39,7 @@ public class ApplicationLoop {
             return;
         }
         if ("q".equals(input[0])) {
+            saveState();
             System.out.println("Bye!");
             return;
         }
@@ -57,15 +61,28 @@ public class ApplicationLoop {
         }
     }
 
+    void loadState() {
+        university = saveManager.restoreState(FILENAME);
+        if (university == null) {
+            university = new University();
+        }
+    }
+
+    void saveState() {
+        saveManager.saveState(university, FILENAME);
+    }
+
     void handleMainMenu(String input) {
         switch (input) {
             case "g" -> {
                 state = ProgramState.GENERAL_OPERATIONS;
                 displayHelp(state);
-            } case "f" -> {
+            }
+            case "f" -> {
                 state = ProgramState.FACULTY_OPERATIONS;
                 displayHelp(state);
-            } default -> Utils.showInvalidCommandError(input);
+            }
+            default -> Utils.showInvalidCommandError(input);
         }
     }
 
@@ -87,7 +104,7 @@ public class ApplicationLoop {
         System.out.println("g - General operations");
         System.out.println("f - Faculty operations");
         System.out.println("h - Help");
-        System.out.println("\nq - Quit");
+        System.out.println("\nq - Quit and Save");
     }
 
     void printGeneralOperationsHelp() {
@@ -98,7 +115,7 @@ public class ApplicationLoop {
         System.out.println("df - display faculties");
         System.out.println("df/<field> - display all faculties of a field");
         System.out.println("\nb - Back");
-        System.out.println("q - Quit");
+        System.out.println("q - Quit and Save");
     }
 
     void printFacultyOperationsHelp() {
@@ -110,7 +127,7 @@ public class ApplicationLoop {
         System.out.println("dg/<faculty abbreviation> - (d)isplay (g)raduated students");
         System.out.println("bf/<faculty abbreviation>/<email> - check if student (b)elongs to (f)aculty");
         System.out.println("\nb - Back");
-        System.out.println("q - Quit");
+        System.out.println("q - Quit and Save");
     }
 
     enum ProgramState {

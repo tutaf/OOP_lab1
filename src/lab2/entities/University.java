@@ -1,9 +1,10 @@
 package lab2.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class University {
+public class University implements Serializable {
 
     private List<Faculty> faculties;
 
