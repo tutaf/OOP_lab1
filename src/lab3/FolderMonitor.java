@@ -1,6 +1,7 @@
 package lab3;
 
 import lab3.files.File;
+import lab3.files.ImageFile;
 import lab3.files.TextFile;
 
 import java.io.IOException;
@@ -44,6 +45,8 @@ class FolderMonitor {
             try {
                 if (fileName.endsWith(".txt")) {
                     filesMap.put(path, new TextFile(path));
+                } if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                    filesMap.put(path, new ImageFile(path));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

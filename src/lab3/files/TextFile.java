@@ -11,10 +11,7 @@ public class TextFile extends File {
 
     @Override
     public void info() {
-        System.out.println("filename: " + filePath.getFileName());
-        System.out.println("extension: .txt");
-        System.out.println("created at: " + attributes.creationTime());
-        System.out.println("modified at: " + attributes.lastModifiedTime());
+        printBasicInfo();
 
         try (Scanner scanner = new Scanner(filePath)) {
             int lineCount = 0, wordCount = 0, charCount = 0;
