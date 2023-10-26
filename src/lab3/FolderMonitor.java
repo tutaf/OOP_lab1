@@ -5,10 +5,9 @@ import lab3.files.ImageFile;
 import lab3.files.TextFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,21 +39,39 @@ class FolderMonitor {
     }
 
     private void loadFiles() throws IOException {
-        Files.list(Paths.get(FOLDER_PATH)).forEach(path -> {
-            String fileName = path.getFileName().toString();
-            try {
-                if (fileName.endsWith(".txt")) {
-                    filesMap.put(path, new TextFile(path));
-                } if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
-                    filesMap.put(path, new ImageFile(path));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Files.list(Paths.get(FOLDER_PATH)).forEach(this::loadFile);
     }
 
-    private void commit() {
+    private void loadFile(Path path) {
+        String fileName = path.getFileName().toString();
+        try {
+            if (fileName.endsWith(".txt")) {
+                filesMap.put(path, new TextFile(path));
+            } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                filesMap.put(path, new ImageFile(path));
+            } // TODO add "Program" file type
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void commit() throws IOException {
+        Map<Path, File> addedFiles = new HashMap<>();
+        Map<Path, File> deletedFiles = new HashMap<>(filesMap);
+
+        Files.list(Paths.get(FOLDER_PATH)).forEach(path -> {
+            if (!filesMap.containsKey(path)) {
+                System.out.println(path.getFileName() + " - added");
+                loadFile(path);
+            }
+            deletedFiles.remove(path);
+        });
+
+        deletedFiles.forEach((path, file) -> System.out.println(path.getFileName() + " - deleted"));
+
+        filesMap.putAll(addedFiles);
+        filesMap.keySet().removeAll(deletedFiles.keySet());
+
         lastCommitTime = System.currentTimeMillis();
     }
 
@@ -67,20 +84,39 @@ class FolderMonitor {
         }
     }
 
-    private void status() {
-        filesMap.forEach((path, file) -> {
+    private void status() throws IOException {
+        Map<Path, FileTime> currentFiles = new HashMap<>();
+
+        Files.list(Paths.get(FOLDER_PATH)).forEach(path -> {
             try {
-                BasicFileAttributes currentAttributes = Files.readAttributes(path, BasicFileAttributes.class);
-                long lastModifiedTime = currentAttributes.lastModifiedTime().toMillis();
-                if (lastModifiedTime > lastCommitTime) {
-                    System.out.println(path.getFileName() + " - changed");
-                } else {
-                    System.out.println(path.getFileName() + " - no changes");
-                }
+                BasicFileAttributes attributes = Files.readAttributes(path, BasicFileAttributes.class);
+                currentFiles.put(path, attributes.lastModifiedTime());
             } catch (IOException e) {
                 System.out.println("Failed to get file attributes for " + path.getFileName());
             }
         });
-    }
 
+        for (Map.Entry<Path, File> entry : filesMap.entrySet()) {
+            Path path = entry.getKey();
+            //File file = entry.getValue();
+
+            if (currentFiles.containsKey(path)) {
+                // if file still exists
+                if (currentFiles.get(path).toMillis() > lastCommitTime) {
+                    System.out.println(path.getFileName() + " - changed");
+                } else {
+                    System.out.println(path.getFileName() + " - no changes");
+                }
+            } else {
+                // if file has been deleted
+                System.out.println(path.getFileName() + " - deleted");
+            }
+        }
+
+        currentFiles.keySet().forEach(path -> {
+            if (!filesMap.containsKey(path)) {
+                System.out.println(path.getFileName() + " - added");
+            }
+        });
+    }
 }
