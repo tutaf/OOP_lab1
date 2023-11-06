@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public abstract class File {
     Path filePath;
-    public BasicFileAttributes attributes; // TODO make path and attributes private
+    private BasicFileAttributes attributes;
 
     public File(Path filePath) throws IOException {
         this.filePath = filePath;

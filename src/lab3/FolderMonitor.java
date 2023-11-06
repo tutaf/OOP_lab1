@@ -77,12 +77,27 @@ class FolderMonitor {
 
     private void info(String fileName) {
         Path filePath = Paths.get(FOLDER_PATH, fileName);
-        if (filesMap.containsKey(filePath)) {
-            filesMap.get(filePath).info();
+        if (Files.exists(filePath)) {
+            File file = filesMap.get(filePath);
+            if (file == null) {
+                try {
+                    if (fileName.endsWith(".txt")) {
+                        file = new TextFile(filePath);
+                    } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                        file = new ImageFile(filePath);
+                    } // TODO add ProgramFile
+                    file.info();
+                } catch (IOException e) {
+                    System.out.println("Error while loading info: " + e.getMessage());
+                }
+            } else {
+                file.info();
+            }
         } else {
-            System.out.println("File not found!");
+            System.out.println("File not found");
         }
     }
+
 
     private void status() throws IOException {
         Map<Path, FileTime> currentFiles = new HashMap<>();
