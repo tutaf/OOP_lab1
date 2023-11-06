@@ -2,6 +2,7 @@ package lab3;
 
 import lab3.files.File;
 import lab3.files.ImageFile;
+import lab3.files.ProgramFile;
 import lab3.files.TextFile;
 
 import java.io.IOException;
@@ -26,16 +27,33 @@ class FolderMonitor {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Enter action (commit, info <filename>, status):");
+            System.out.println("Enter action (commit, info <filename or full path>, status):");
             String input = scanner.nextLine();
+            String[] inputParts = input.split("\\s+", 2);
+
             if (input.equals("commit")) {
                 commit();
-            } else if (input.startsWith("info")) {
-                info(input.split(" ")[1]);
+            } else if (inputParts[0].equals("info")) {
+                if (inputParts.length > 1) {
+                    String fileInfo = inputParts[1];
+                    if (isFullPath(fileInfo)) {
+                        info(Paths.get(fileInfo));
+                    } else {
+                        info(fileInfo);
+                    }
+                } else {
+                    System.out.println("File name or path not specified.");
+                }
             } else if (input.equals("status")) {
                 status();
+            } else {
+                System.out.println("Unknown command.");
             }
         }
+    }
+
+    private boolean isFullPath(String path) {
+        return path.contains(":\\");
     }
 
     private void loadFiles() throws IOException {
@@ -49,7 +67,10 @@ class FolderMonitor {
                 filesMap.put(path, new TextFile(path));
             } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
                 filesMap.put(path, new ImageFile(path));
-            } // TODO add "Program" file type
+            } else if (fileName.endsWith(".java")) {
+                filesMap.put(path, new ProgramFile(path));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,12 +98,53 @@ class FolderMonitor {
 
     private void info(String fileName) {
         Path filePath = Paths.get(FOLDER_PATH, fileName);
-        if (filesMap.containsKey(filePath)) {
-            filesMap.get(filePath).info();
+        if (Files.exists(filePath)) {
+            File file = filesMap.get(filePath);
+            if (file == null) {
+                try {
+                    if (fileName.endsWith(".txt")) {
+                        file = new TextFile(filePath);
+                    } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+                        file = new ImageFile(filePath);
+                    } else if (fileName.endsWith(".java")) {
+                        file = new ProgramFile(filePath);
+                    }
+                    file.info();
+                } catch (IOException e) {
+                    System.out.println("Error while loading info: " + e.getMessage());
+                }
+            } else {
+                file.info();
+            }
         } else {
-            System.out.println("File not found!");
+            System.out.println("File not found");
         }
     }
+
+    private void info(Path filePath) {
+        if (Files.exists(filePath)) {
+            try {
+                File file;
+                if (filePath.toString().endsWith(".txt")) {
+                    file = new TextFile(filePath);
+                } else if (filePath.toString().endsWith(".png") || filePath.toString().endsWith(".jpg")) {
+                    file = new ImageFile(filePath);
+                } else if (filePath.toString().endsWith(".java")) {
+                    file = new ImageFile(filePath);
+                } else {
+                    System.out.println("Unsupported file type");
+                    return;
+                }
+                file.info();
+            } catch (IOException e) {
+                System.out.println("Error while getting info: " + e.getMessage());
+            }
+        } else {
+            System.out.println("File not found");
+        }
+    }
+
+
 
     private void status() throws IOException {
         Map<Path, FileTime> currentFiles = new HashMap<>();
