@@ -26,16 +26,33 @@ class FolderMonitor {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Enter action (commit, info <filename>, status):");
+            System.out.println("Enter action (commit, info <filename or full path>, status):");
             String input = scanner.nextLine();
+            String[] inputParts = input.split("\\s+", 2);
+
             if (input.equals("commit")) {
                 commit();
-            } else if (input.startsWith("info")) {
-                info(input.split(" ")[1]);
+            } else if (inputParts[0].equals("info")) {
+                if (inputParts.length > 1) {
+                    String fileInfo = inputParts[1];
+                    if (isFullPath(fileInfo)) {
+                        info(Paths.get(fileInfo));
+                    } else {
+                        info(fileInfo);
+                    }
+                } else {
+                    System.out.println("File name or path not specified.");
+                }
             } else if (input.equals("status")) {
                 status();
+            } else {
+                System.out.println("Unknown command.");
             }
         }
+    }
+
+    private boolean isFullPath(String path) {
+        return path.contains(":\\");
     }
 
     private void loadFiles() throws IOException {
@@ -97,6 +114,28 @@ class FolderMonitor {
             System.out.println("File not found");
         }
     }
+
+    private void info(Path filePath) {
+        if (Files.exists(filePath)) {
+            try {
+                File file;
+                if (filePath.toString().endsWith(".txt")) {
+                    file = new TextFile(filePath);
+                } else if (filePath.toString().endsWith(".png") || filePath.toString().endsWith(".jpg")) {
+                    file = new ImageFile(filePath);
+                } else {
+                    System.out.println("Unsupported file type");
+                    return;
+                }
+                file.info();
+            } catch (IOException e) {
+                System.out.println("Error while getting info: " + e.getMessage());
+            }
+        } else {
+            System.out.println("File not found");
+        }
+    }
+
 
 
     private void status() throws IOException {
