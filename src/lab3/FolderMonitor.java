@@ -2,6 +2,7 @@ package lab3;
 
 import lab3.files.File;
 import lab3.files.ImageFile;
+import lab3.files.ProgramFile;
 import lab3.files.TextFile;
 
 import java.io.IOException;
@@ -66,7 +67,10 @@ class FolderMonitor {
                 filesMap.put(path, new TextFile(path));
             } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
                 filesMap.put(path, new ImageFile(path));
-            } // TODO add "Program" file type
+            } else if (fileName.endsWith(".java")) {
+                filesMap.put(path, new ProgramFile(path));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,7 +106,9 @@ class FolderMonitor {
                         file = new TextFile(filePath);
                     } else if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
                         file = new ImageFile(filePath);
-                    } // TODO add ProgramFile
+                    } else if (fileName.endsWith(".java")) {
+                        file = new ProgramFile(filePath);
+                    }
                     file.info();
                 } catch (IOException e) {
                     System.out.println("Error while loading info: " + e.getMessage());
@@ -122,6 +128,8 @@ class FolderMonitor {
                 if (filePath.toString().endsWith(".txt")) {
                     file = new TextFile(filePath);
                 } else if (filePath.toString().endsWith(".png") || filePath.toString().endsWith(".jpg")) {
+                    file = new ImageFile(filePath);
+                } else if (filePath.toString().endsWith(".java")) {
                     file = new ImageFile(filePath);
                 } else {
                     System.out.println("Unsupported file type");
