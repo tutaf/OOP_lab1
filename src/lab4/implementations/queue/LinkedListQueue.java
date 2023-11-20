@@ -3,25 +3,14 @@ package lab4.implementations.queue;
 import lab4.interfaces.Queue;
 import lab4.exceptions.QueueFullException;
 import lab4.exceptions.QueueEmptyException;
+import java.util.LinkedList;
 
 public class LinkedListQueue<T> implements Queue<T> {
     private static final int CAPACITY = 5;
-    private Node front, rear;
-    private int size;
-
-    private class Node {
-        T data;
-        Node next;
-
-        Node(T data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
+    private LinkedList<T> queue;
 
     public LinkedListQueue() {
-        this.front = this.rear = null;
-        this.size = 0;
+        queue = new LinkedList<>();
     }
 
     @Override
@@ -29,14 +18,7 @@ public class LinkedListQueue<T> implements Queue<T> {
         if (isFull()) {
             throw new QueueFullException();
         }
-        Node newNode = new Node(element);
-        if (rear == null) {
-            front = rear = newNode;
-        } else {
-            rear.next = newNode;
-            rear = newNode;
-        }
-        size++;
+        queue.addLast(element);
     }
 
     @Override
@@ -44,13 +26,7 @@ public class LinkedListQueue<T> implements Queue<T> {
         if (isEmpty()) {
             throw new QueueEmptyException();
         }
-        T data = front.data;
-        front = front.next;
-        if (front == null) {
-            rear = null;
-        }
-        size--;
-        return data;
+        return queue.removeFirst();
     }
 
     @Override
@@ -58,16 +34,16 @@ public class LinkedListQueue<T> implements Queue<T> {
         if (isEmpty()) {
             throw new QueueEmptyException();
         }
-        return front.data;
+        return queue.peekFirst();
     }
 
     @Override
     public boolean isEmpty() {
-        return front == null;
+        return queue.isEmpty();
     }
 
     @Override
     public boolean isFull() {
-        return size == CAPACITY;
+        return queue.size() == CAPACITY;
     }
 }
